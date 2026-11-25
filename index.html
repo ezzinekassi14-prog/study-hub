@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUDY HUB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a href="index.html" class="brand" id="logoHomeLink">STUDY <span>HUB</span></a>
+            <div class="nav-actions">
+                <span class="muted" id="syncBadge">Local</span>
+                <button type="button" class="btn" id="premiumToggleBtn">Premium</button>
+                <button type="button" class="btn" id="profileToggleBtn">Account</button>
+                <button type="button" class="btn" id="themeBtn">Light Mode</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="page">
+        <!-- PREMIUM PLANS & TELEGRAM APPROVAL CARD -->
+        <section id="premiumCard" class="card stack" style="display: none;">
+            <div class="row-between">
+                <div>
+                    <h3>STUDY HUB Premium</h3>
+                    <div class="muted">More devoirat, private devoirat, deeper explanations &amp; extra help</div>
+                </div>
+                <span class="badge" id="premiumStatusBadge">Free</span>
+            </div>
+
+            <div class="plans-grid">
+                <div class="plan-box">
+                    <div class="row-between">
+                        <strong>3 Days Pass</strong>
+                        <span class="badge">Short</span>
+                    </div>
+                    <div class="plan-price">5 TND</div>
+                    <div class="muted">3 days access to private devoirat, detailed explanations &amp; study help.</div>
+                    <button type="button" class="btn btn-primary" data-select-plan="3days">Select 3 Days (5 TND)</button>
+                </div>
+
+                <div class="plan-box">
+                    <div class="row-between">
+                        <strong>20 Days Pass</strong>
+                        <span class="badge">Best Value</span>
+                    </div>
+                    <div class="plan-price">15 TND</div>
+                    <div class="muted">20 days full access to private devoirat, deep explanations &amp; extra help.</div>
+                    <button type="button" class="btn btn-primary" data-select-plan="20days">Select 20 Days (15 TND)</button>
+                </div>
+            </div>
+
+            <div class="premium-banner">
+                <strong id="selectedPlanTitle">Selected: 3 Days — 5 TND</strong>
+                <div class="muted" id="selectedPlanDesc">
+                    Includes: Private devoirat, detailed explanations, and help on difficult points for 3 days.
+                </div>
+
+                <div class="row" style="flex-wrap: wrap;">
+                    <button type="button" class="btn btn-primary" id="requestPremiumBtn">Request Premium via Telegram</button>
+                    <button type="button" class="btn" id="refreshPremiumBtn">Check Status</button>
+                </div>
+
+                <div class="muted" id="premiumMsg"></div>
+            </div>
+        </section>
+
+        <!-- ACCOUNT CARD -->
+        <section id="accountCard" class="card stack">
+            <div class="row-between">
+                <h3>Account</h3>
+                <span class="muted">Name &amp; photo • 30-day lock</span>
+            </div>
+
+            <form id="accountForm" class="stack" autocomplete="off">
+                <div class="row">
+                    <img id="avatarPreview" class="avatar-lg" alt="Avatar">
+                    <div class="stack" style="gap: 6px; flex: 1;">
+                        <label class="muted">Photo</label>
+                        <input type="file" id="picInput" accept="image/*" class="input">
+                        <div class="muted" id="picLockHint"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="muted">Name (3–20 chars)</label>
+                    <input type="text" id="nameInput" class="input" minlength="3" maxlength="20" placeholder="Your name...">
+                    <div class="muted" id="nameLockHint" style="margin-top: 4px;"></div>
+                </div>
+
+                <div class="row-between">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <span class="muted" id="accMsg"></span>
+                </div>
+            </form>
+        </section>
+
+        <!-- FEED HEADER -->
+        <div id="feedHeader" class="card row-between" style="display: none;">
+            <div class="row">
+                <img id="headerAvatar" class="avatar" alt="User">
+                <div>
+                    <div class="row" style="gap: 6px;">
+                        <strong id="headerName">Student</strong>
+                        <span class="premium-badge" id="headerPremiumTag" style="display: none;">PREMIUM</span>
+                    </div>
+                    <div class="muted" id="headerSubText">Devoirat &amp; Study Chat</div>
+                </div>
+            </div>
+            <div class="mode-switch">
+                <button type="button" class="btn active" id="tabDevoirs">Devoirat</button>
+                <button type="button" class="btn" id="tabStudyChat">Study Chat</button>
+                <button type="button" class="btn btn-primary" id="newPostToggle">+ Create</button>
+            </div>
+        </div>
+
+        <!-- CREATE POST FORM -->
+        <form id="devoirForm" class="card stack" style="display: none;" autocomplete="off">
+            <div class="row-between">
+                <strong>New Post</strong>
+                <button type="button" class="btn" id="closePostForm">Close</button>
+            </div>
+
+            <div class="mode-switch">
+                <button type="button" class="btn active" id="optLinkBtn">Title + Text + Link</button>
+                <button type="button" class="btn" id="optQuestionBtn">Title + Text + Question</button>
+            </div>
+
+            <div class="row">
+                <label class="row muted" style="cursor: pointer;">
+                    <input type="checkbox" id="devPrivateCheck">
+                    <span>Private Devoir (Premium)</span>
+                </label>
+            </div>
+
+            <input type="text" id="devTitle" class="input" placeholder="Title..." required>
+            <textarea id="devText" class="textarea" placeholder="Text..." required></textarea>
+            <textarea id="devExplanation" class="textarea" placeholder="Detailed explanation / extra help (optional)..." style="min-height: 68px;"></textarea>
+
+            <div id="linkFieldWrap">
+                <input type="url" id="devLink" class="input" placeholder="Link (https://...)">
+            </div>
+
+            <div id="questionFieldWrap" style="display: none;">
+                <input type="text" id="devQuestion" class="input" placeholder="Question...">
+            </div>
+
+            <div class="row-between">
+                <button type="submit" class="btn btn-primary">Publish</button>
+                <span class="muted" id="postMsg"></span>
+            </div>
+        </form>
+
+        <!-- DEVOIRAT FEED -->
+        <section id="feedSection" class="stack" style="display: none;">
+            <input type="text" id="searchInput" class="input" placeholder="Search devoirat...">
+            <div id="devoirsList" class="stack"></div>
+        </section>
+
+        <!-- GROUP STUDY CHAT -->
+        <section id="studyChatSection" class="card stack" style="display: none;">
+            <div class="row-between">
+                <strong>Study Chat</strong>
+                <span class="badge">Group</span>
+            </div>
+
+            <div id="studyChatBox" class="study-chat-box">
+                <div class="muted">No messages yet.</div>
+            </div>
+
+            <form id="studyChatForm" class="row" autocomplete="off">
+                <input type="text" id="studyChatInput" class="input" placeholder="Write a message..." style="flex: 1;">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </section>
+    </main>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import {
+        getFirestore,
+        collection,
+        doc,
+        getDoc,
+        setDoc,
+        updateDoc,
+        deleteDoc,
+        onSnapshot,
+        query,
+        orderBy,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+    const FIREBASE_CONFIG = {
+        apiKey: "AIzaSyBWNDyKDXnz67CDTJC-813b6vMK8-k-P4g",
+        authDomain: "study-hub-cbd0d.firebaseapp.com",
+        projectId: "study-hub-cbd0d",
+        storageBucket: "study-hub-cbd0d.firebasestorage.app",
+        messagingSenderId: "197196498050",
+        appId: "1:197196498050:web:e78315652ef36ba561e89b",
+        measurementId: "G-QMD7L2FQGX"
+    };
+
+    const TELEGRAM_BOT_TOKEN = "8856823986:AAEJku8ej08gyhhA9E_JP6IgLvm_Hb567oU";
+    const TELEGRAM_ADMIN_ID = "8007161832";
+
+    let db = null;
+    try {
+        const app = initializeApp(FIREBASE_CONFIG);
+        db = getFirestore(app);
+    } catch {
+        db = null;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+        const WORD_LIMIT = 40;
+        const PREVIEW_COMMENTS_LIMIT = 2;
+        const DEFAULT_AVATAR = "data:image/svg+xml;utf8," + encodeURIComponent(
+            `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+                <rect width="80" height="80" fill="#1e293b"/>
+                <circle cx="40" cy="30" r="14" fill="#38bdf8"/>
+                <path d="M16 70c4-14 44-14 48 0" fill="#38bdf8"/>
+            </svg>`
+        );
+
+        const $ = (s) => document.querySelector(s);
+        const esc = (s) => {
+            const d = document.createElement("div");
+            d.textContent = s ?? "";
+            return d.innerHTML;
+        };
+        const getDB = (k, fb) => {
+            try {
+                const raw = localStorage.getItem("studyhub_" + k);
+                return raw !== null ? JSON.parse(raw) : fb;
+            } catch {
+                return fb;
+            }
+        };
+        const setDB = (k, v) => {
+            try {
+                localStorage.setItem("studyhub_" + k, JSON.stringify(v));
+            } catch {}
+        };
+
+        $("#syncBadge").textContent = db ? "Firebase Live" : "Local";
+
+        const applyTheme = (mode) => {
+            document.body.classList.toggle("light", mode === "light");
+            $("#themeBtn").textContent = mode === "light" ? "Dark Mode" : "Light Mode";
+            setDB("theme", mode);
+        };
+        applyTheme(getDB("theme", "dark"));
+        $("#themeBtn").addEventListener("click", () => {
+            applyTheme(document.body.classList.contains("light") ? "dark" : "light");
+        });
+
+        let account = getDB("account", null);
+        let pendingPic = account?.pic || DEFAULT_AVATAR;
+        let devoirs = getDB("devoirs", []);
+        if (!Array.isArray(devoirs)) devoirs = [];
+        let studyMessages = getDB("study_chat", []);
+        if (!Array.isArray(studyMessages)) studyMessages = [];
+
+        let createType = "link";
+        let activeTab = "devoirs";
+        let openCommentId = null;
+        let selectedPlan = "3days";
+        const expandedPostIds = new Set();
+        const showAllCommentsPostIds = new Set();
+
+        const isPremiumActive = () => {
+            if (!account || !account.premiumUntil) return false;
+            return Number(account.premiumUntil) > Date.now();
+        };
+
+        const getPremiumDaysLeft = () => {
+            if (!isPremiumActive()) return 0;
+            return Math.ceil((Number(account.premiumUntil) - Date.now()) / (24 * 60 * 60 * 1000));
+        };
+
+        const refreshUserFromFirestore = async () => {
+            if (!db || !account?.name) return;
+            try {
+                const userDocId = encodeURIComponent(account.name.toLowerCase());
+                const snap = await getDoc(doc(db, "users", userDocId));
+                if (snap.exists()) {
+                    const remote = snap.data();
+                    account = {
+                        ...account,
+                        premiumUntil: remote.premiumUntil || account.premiumUntil || null,
+                        premiumPlan: remote.premiumPlan || account.premiumPlan || null
+                    };
+                    setDB("account", account);
+                    syncUI();
+                }
+            } catch {}
+        };
+
+        const updateSelectedPlanUI = () => {
+            if (selectedPlan === "20days") {
+                $("#selectedPlanTitle").textContent = "Selected: 20 Days — 15 TND";
+                $("#selectedPlanDesc").textContent = "Includes: Private devoirat, deep explanations, and help on difficult points for 20 days.";
+            } else {
+                $("#selectedPlanTitle").textContent = "Selected: 3 Days — 5 TND";
+                $("#selectedPlanDesc").textContent = "Includes: Private devoirat, detailed explanations, and help on difficult points for 3 days.";
+            }
+        };
+
+        document.querySelectorAll("[data-select-plan]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                selectedPlan = btn.dataset.selectPlan;
+                updateSelectedPlanUI();
+            });
+        });
+
+        $("#requestPremiumBtn").addEventListener("click", async () => {
+            if (!account || !account.name) {
+                $("#premiumMsg").textContent = "Save your Account name first.";
+                return;
+            }
+
+            const planInfo = selectedPlan === "20days"
+                ? { code: "20d", price: "15 TND", days: 20, label: "20 Days (15 TND)" }
+                : { code: "3d", price: "5 TND", days: 3, label: "3 Days (5 TND)" };
+
+            const reqId = Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 6);
+            const userKey = encodeURIComponent(account.name.toLowerCase());
+
+            if (db) {
+                try {
+                    await setDoc(doc(db, "premium_requests", reqId), {
+                        reqId,
+                        userDocId: userKey,
+                        userName: account.name,
+                        planCode: planInfo.code,
+                        planLabel: planInfo.label,
+                        days: planInfo.days,
+                        price: planInfo.price,
+                        status: "pending",
+                        createdAt: serverTimestamp()
+                    });
+                } catch {}
+            }
+
+            const msgText =
+                `🎓 *STUDY HUB — Premium Request*\n` +
+                `👤 *Student:* ${account.name}\n` +
+                `📦 *Plan:* ${planInfo.label}\n` +
+                `🆔 *Request:* \`${reqId}\``;
+
+            const replyMarkup = {
+                inline_keyboard: [[
+                    { text: "✅ Yes (Give Premium)", callback_data: `prem_yes:${reqId}:${userKey}:${planInfo.days}` },
+                    { text: "❌ No", callback_data: `prem_no:${reqId}:${userKey}` }
+                ]]
+            };
+
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_ADMIN_ID,
+                        text: msgText,
+                        parse_mode: "Markdown",
+                        reply_markup: replyMarkup
+                    })
+                });
+                const data = await res.json();
+                if (data.ok) {
+                    $("#premiumMsg").textContent = `Request sent to Telegram for ${planInfo.label}. Click "Check Status" after approval.`;
+                } else {
+                    $("#premiumMsg").textContent = "Telegram request failed. Check bot permissions/chat.";
+                }
+            } catch {
+                $("#premiumMsg").textContent = "Network error while sending Telegram request.";
+            }
+        });
+
+        $("#refreshPremiumBtn").addEventListener("click", async () => {
+            await refreshUserFromFirestore();
+            $("#premiumMsg").textContent = isPremiumActive()
+                ? `Premium is active (${getPremiumDaysLeft()} day(s) left).`
+                : "Not active yet.";
+        });
+
+        const countWords = (str) =>
+            String(str || "").trim().split(/\s+/).filter(Boolean).length;
+
+        const truncateByWords = (str, maxWords) => {
+            const matches = [...String(str || "").matchAll(/\S+/g)];
+            if (matches.length <= maxWords) return { text: String(str || ""), cut: false };
+            const endIdx = matches[maxWords - 1].index + matches[maxWords - 1][0].length;
+            return { text: String(str || "").slice(0, endIdx) + "...", cut: true };
+        };
+
+        const getVoterKey = () => (account?.name ? String(account.name).toLowerCase() : "guest");
+
+        const getDaysRemaining = (changedAt) => {
+            if (!changedAt) return 0;
+            const diff = Date.now() - Number(changedAt);
+            if (diff >= THIRTY_DAYS_MS) return 0;
+            return Math.ceil((THIRTY_DAYS_MS - diff) / (24 * 60 * 60 * 1000));
+        };
+
+        const syncUI = () => {
+            const hasAccount = Boolean(account && account.name);
+            const premiumNow = isPremiumActive();
+            const premiumDays = getPremiumDaysLeft();
+
+            $("#avatarPreview").src = pendingPic || DEFAULT_AVATAR;
+            $("#premiumStatusBadge").textContent = premiumNow ? `Premium (${premiumDays}d left)` : "Free";
+            $("#headerPremiumTag").style.display = premiumNow ? "inline-flex" : "none";
+            $("#headerSubText").textContent = premiumNow
+                ? `Premium active • ${premiumDays} day(s) remaining`
+                : "Devoirat & Study Chat";
+
+            if (hasAccount) {
+                $("#headerAvatar").src = account.pic || DEFAULT_AVATAR;
+                $("#headerName").textContent = account.name;
+                $("#nameInput").value = account.name;
+                $("#feedHeader").style.display = "flex";
+
+                const nameDaysLeft = getDaysRemaining(account.nameChangedAt);
+                const picDaysLeft = getDaysRemaining(account.picChangedAt);
+
+                if (nameDaysLeft > 0) {
+                    $("#nameInput").disabled = true;
+                    $("#nameLockHint").textContent = `Locked for ${nameDaysLeft} day(s).`;
+                } else {
+                    $("#nameInput").disabled = false;
+                    $("#nameLockHint").textContent = "Unlocks for 30 days after saving.";
+                }
+
+                if (picDaysLeft > 0) {
+                    $("#picInput").disabled = true;
+                    $("#picLockHint").textContent = `Locked for ${picDaysLeft} day(s).`;
+                } else {
+                    $("#picInput").disabled = false;
+                    $("#picLockHint").textContent = "Unlocks for 30 days after saving.";
+                }
+
+                if (activeTab === "chat") {
+                    $("#feedSection").style.display = "none";
+                    $("#studyChatSection").style.display = "flex";
+                    renderStudyChat();
+                } else {
+                    $("#feedSection").style.display = "flex";
+                    $("#studyChatSection").style.display = "none";
+                    renderDevoirs();
+                }
+            } else {
+                $("#accountCard").style.display = "flex";
+                $("#feedHeader").style.display = "none";
+                $("#feedSection").style.display = "none";
+                $("#studyChatSection").style.display = "none";
+                $("#nameInput").disabled = false;
+                $("#picInput").disabled = false;
+                $("#nameLockHint").textContent = "Locked for 30 days after saving.";
+                $("#picLockHint").textContent = "Locked for 30 days after saving.";
+            }
+        };
+
+        const switchMainTab = (tab) => {
+            activeTab = tab;
+            $("#tabDevoirs").classList.toggle("active", tab === "devoirs");
+            $("#tabStudyChat").classList.toggle("active", tab === "chat");
+            syncUI();
+        };
+
+        $("#logoHomeLink").addEventListener("click", (e) => {
+            e.preventDefault();
+            $("#accountCard").style.display = "none";
+            $("#premiumCard").style.display = "none";
+            $("#devoirForm").style.display = "none";
+            if ($("#searchInput")) $("#searchInput").value = "";
+            switchMainTab("devoirs");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        $("#premiumToggleBtn").addEventListener("click", async () => {
+            const card = $("#premiumCard");
+            const show = card.style.display === "none";
+            card.style.display = show ? "flex" : "none";
+            $("#premiumMsg").textContent = "";
+            updateSelectedPlanUI();
+            if (show) await refreshUserFromFirestore();
+        });
+
+        $("#picInput").addEventListener("change", (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    const size = 160;
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext("2d");
+                    const minSide = Math.min(img.width, img.height);
+                    const sx = (img.width - minSide) / 2;
+                    const sy = (img.height - minSide) / 2;
+                    ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+                    pendingPic = canvas.toDataURL("image/jpeg", 0.8);
+                    $("#avatarPreview").src = pendingPic;
+                };
+                img.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        $("#accountForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const rawName = ($("#nameInput").value || "").trim();
+            const nameDaysLeft = account ? getDaysRemaining(account.nameChangedAt) : 0;
+            const picDaysLeft = account ? getDaysRemaining(account.picChangedAt) : 0;
+
+            let finalName = account?.name || "";
+            let finalNameChangedAt = account?.nameChangedAt || null;
+            let finalPic = account?.pic || DEFAULT_AVATAR;
+            let finalPicChangedAt = account?.picChangedAt || null;
+
+            if (!account || nameDaysLeft === 0) {
+                if (rawName.length < 3 || rawName.length > 20) {
+                    $("#accMsg").textContent = "Name: 3–20 characters.";
+                    return;
+                }
+                if (!account || rawName !== account.name) {
+                    finalName = rawName;
+                    finalNameChangedAt = Date.now();
+                }
+            }
+
+            if (!account || picDaysLeft === 0) {
+                const chosenPic = pendingPic || DEFAULT_AVATAR;
+                if (!account || chosenPic !== account.pic) {
+                    finalPic = chosenPic;
+                    finalPicChangedAt = Date.now();
+                }
+            }
+
+            account = {
+                ...(account || {}),
+                name: finalName,
+                pic: finalPic,
+                nameChangedAt: finalNameChangedAt,
+                picChangedAt: finalPicChangedAt
+            };
+            pendingPic = finalPic;
+            setDB("account", account);
+
+            if (db) {
+                try {
+                    const userDocId = encodeURIComponent(finalName.toLowerCase());
+                    await setDoc(doc(db, "users", userDocId), {
+                        name: finalName,
+                        pic: finalPic,
+                        nameChangedAt: finalNameChangedAt,
+                        picChangedAt: finalPicChangedAt,
+                        premiumUntil: account.premiumUntil || null,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+                } catch {}
+            }
+
+            $("#accMsg").textContent = "Saved.";
+            $("#accountCard").style.display = "none";
+            syncUI();
+        });
+
+        $("#profileToggleBtn").addEventListener("click", () => {
+            const card = $("#accountCard");
+            pendingPic = account?.pic || DEFAULT_AVATAR;
+            card.style.display = card.style.display === "none" ? "flex" : "none";
+            $("#accMsg").textContent = "";
+            syncUI();
+        });
+
+        $("#tabDevoirs").addEventListener("click", () => switchMainTab("devoirs"));
+        $("#tabStudyChat").addEventListener("click", () => switchMainTab("chat"));
+
+        const setCreateType = (type) => {
+            createType = type;
+            const isLink = type === "link";
+            $("#optLinkBtn").classList.toggle("active", isLink);
+            $("#optQuestionBtn").classList.toggle("active", !isLink);
+            $("#linkFieldWrap").style.display = isLink ? "block" : "none";
+            $("#questionFieldWrap").style.display = isLink ? "none" : "block";
+            $("#postMsg").textContent = "";
+        };
+        $("#optLinkBtn").addEventListener("click", () => setCreateType("link"));
+        $("#optQuestionBtn").addEventListener("click", () => setCreateType("question"));
+
+        $("#newPostToggle").addEventListener("click", () => {
+            switchMainTab("devoirs");
+            const form = $("#devoirForm");
+            const show = form.style.display === "none";
+            form.style.display = show ? "flex" : "none";
+            if (show) $("#devTitle").focus();
+        });
+
+        $("#closePostForm").addEventListener("click", () => {
+            $("#devoirForm").style.display = "none";
+        });
+
+        $("#devoirForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!account || !account.name) return;
+
+            const wantsPrivate = Boolean($("#devPrivateCheck").checked);
+            if (wantsPrivate && !isPremiumActive()) {
+                $("#postMsg").textContent = "Private devoir requires Premium (5 TND / 3d or 15 TND / 20d).";
+                return;
+            }
+
+            const title = ($("#devTitle").value || "").trim();
+            const text = ($("#devText").value || "").trim();
+            const explanation = ($("#devExplanation").value || "").trim();
+            const link = ($("#devLink").value || "").trim();
+            const question = ($("#devQuestion").value || "").trim();
+
+            if (!title || !text) {
+                $("#postMsg").textContent = "Title and text required.";
+                return;
+            }
+            if (createType === "link" && !link) {
+                $("#postMsg").textContent = "Link required.";
+                return;
+            }
+            if (createType === "question" && !question) {
+                $("#postMsg").textContent = "Question required.";
+                return;
+            }
+
+            const postId = Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 6);
+            const newPost = {
+                id: postId,
+                type: createType,
+                isPrivate: wantsPrivate,
+                title,
+                text,
+                explanation,
+                link: createType === "link" ? link : "",
+                question: createType === "question" ? question : "",
+                authorName: account.name,
+                authorPic: account.pic || DEFAULT_AVATAR,
+                createdAt: new Date().toLocaleDateString(),
+                createdMs: Date.now(),
+                votes: {},
+                comments: []
+            };
+
+            devoirs.unshift(newPost);
+            setDB("devoirs", devoirs);
+
+            if (db) {
+                try {
+                    await setDoc(doc(db, "devoirs", postId), {
+                        ...newPost,
+                        serverTime: serverTimestamp()
+                    });
+                } catch {}
+            }
+
+            $("#devTitle").value = "";
+            $("#devText").value = "";
+            $("#devExplanation").value = "";
+            $("#devLink").value = "";
+            $("#devQuestion").value = "";
+            $("#devPrivateCheck").checked = false;
+            $("#postMsg").textContent = "";
+            $("#devoirForm").style.display = "none";
+            renderDevoirs();
+        });
+
+        const getVoteScore = (d) =>
+            Object.values(d.votes || {}).reduce((acc, v) => acc + Number(v || 0), 0);
+
+        const renderDevoirs = () => {
+            const q = ($("#searchInput").value || "").trim().toLowerCase();
+            const voterKey = getVoterKey();
+            const premiumNow = isPremiumActive();
+
+            const list = devoirs.filter((d) =>
+                !q ||
+                String(d.title || "").toLowerCase().includes(q) ||
+                String(d.text || "").toLowerCase().includes(q) ||
+                String(d.question || "").toLowerCase().includes(q) ||
+                String(d.authorName || "").toLowerCase().includes(q)
+            );
+
+            if (!list.length) {
+                $("#devoirsList").innerHTML = `<div class="card muted">No posts yet.</div>`;
+                return;
+            }
+
+            $("#devoirsList").innerHTML = list.map((d) => {
+                d.votes = d.votes && typeof d.votes === "object" ? d.votes : {};
+                d.comments = Array.isArray(d.comments) ? d.comments : [];
+                const myVote = Number(d.votes[voterKey] || 0);
+                const score = getVoteScore(d);
+                const isCommentsOpen = openCommentId === d.id;
+                const lockedPrivate = Boolean(d.isPrivate) && !premiumNow && (!account || d.authorName !== account.name);
+
+                const titleWords = countWords(d.title);
+                const textWords = countWords(d.text);
+                const isLongPost = titleWords > WORD_LIMIT || textWords > WORD_LIMIT;
+                const isExpanded = expandedPostIds.has(d.id);
+
+                let shownTitle = String(d.title || "");
+                let shownText = String(d.text || "");
+
+                if (isLongPost && !isExpanded) {
+                    if (titleWords > WORD_LIMIT) {
+                        shownTitle = truncateByWords(shownTitle, WORD_LIMIT).text;
+                        shownText = "";
+                    } else {
+                        shownText = truncateByWords(shownText, WORD_LIMIT).text;
+                    }
+                }
+
+                const hasMoreComments = d.comments.length > PREVIEW_COMMENTS_LIMIT;
+                const showingAllComments = showAllCommentsPostIds.has(d.id);
+                const visibleComments = hasMoreComments && !showingAllComments
+                    ? d.comments.slice(-PREVIEW_COMMENTS_LIMIT)
+                    : d.comments;
+
+                const commentsHtml = isCommentsOpen ? `
+                    <div class="comments-panel">
+                        ${visibleComments.length ? visibleComments.map((c) => `
+                            <div class="comment-row">
+                                <div class="row" style="align-items: flex-start; gap: 8px;">
+                                    <img src="${esc(c.authorPic || DEFAULT_AVATAR)}" class="avatar" style="width: 24px; height: 24px;" alt="">
+                                    <div>
+                                        <div><strong>${esc(c.authorName)}</strong> <span class="muted">• ${esc(c.time || "")}</span></div>
+                                        <div>${esc(c.text)}</div>
+                                    </div>
+                                </div>
+                                ${account && c.authorName === account.name ? `<button type="button" class="btn btn-danger" data-cdel="${esc(c.id)}">x</button>` : ""}
+                            </div>
+                        `).join("") : `<div class="muted">No comments yet.</div>`}
+
+                        ${hasMoreComments ? `
+                            <button type="button" class="comments-toggle-all" data-toggleallcomments="${esc(d.id)}">
+                                ${showingAllComments ? "Show fewer comments" : `Show all comments (${d.comments.length})`}
+                            </button>
+                        ` : ""}
+
+                        <form class="row" data-cform="${esc(d.id)}" autocomplete="off">
+                            <input type="text" class="input" placeholder="Add a comment..." style="flex: 1;">
+                            <button type="submit" class="btn btn-primary">Comment</button>
+                        </form>
+                    </div>
+                ` : "";
+
+                const bodyContent = lockedPrivate ? `
+                    <div class="private-box stack">
+                        <strong>Private Devoir (Premium Only)</strong>
+                        <span class="muted">Upgrade to Premium (5 TND for 3 days or 15 TND for 20 days) to unlock this private devoir and detailed explanations.</span>
+                        <button type="button" class="btn btn-primary" data-open-premium="1" style="align-self: flex-start;">View Premium Plans</button>
+                    </div>
+                ` : `
+                    <h3>${esc(shownTitle)}</h3>
+                    ${shownText ? `<p>${esc(shownText)}</p>` : ""}
+
+                    ${isLongPost ? `
+                        <button type="button" class="read-more-btn" data-readmore="${esc(d.id)}">
+                            ${isExpanded ? "Show less" : "Read more"}
+                        </button>
+                    ` : ""}
+
+                    ${d.explanation ? `
+                        <div class="private-box">
+                            <strong>Deep Explanation &amp; Help:</strong> ${esc(d.explanation)}
+                        </div>
+                    ` : ""}
+
+                    ${d.type === "link" && d.link ? `
+                        <div class="link-box">
+                            <a href="${esc(d.link)}" target="_blank" rel="noopener noreferrer" class="link-url">${esc(d.link)}</a>
+                            <a href="${esc(d.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Open</a>
+                        </div>
+                    ` : ""}
+
+                    ${d.type === "question" && d.question ? `
+                        <div class="question-box">
+                            <strong>Question:</strong> ${esc(d.question)}
+                        </div>
+                    ` : ""}
+                `;
+
+                return `
+                <article class="card stack" data-id="${esc(d.id)}">
+                    <div class="row-between">
+                        <div class="row">
+                            <img src="${esc(d.authorPic || DEFAULT_AVATAR)}" class="avatar" alt="">
+                            <div>
+                                <strong>${esc(d.authorName)}</strong>
+                                <div class="muted">${esc(d.createdAt || "")}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            ${d.isPrivate ? `<span class="premium-badge">Private</span>` : ""}
+                            <span class="badge">${d.type === "question" ? "Question" : "Link"}</span>
+                            ${account && d.authorName === account.name ? `<button type="button" class="btn btn-danger" data-del="${esc(d.id)}">Delete</button>` : ""}
+                        </div>
+                    </div>
+
+                    ${bodyContent}
+
+                    <div class="post-actions">
+                        <div class="vote-group">
+                            <button type="button" class="${myVote === 1 ? "up-active" : ""}" data-up="${esc(d.id)}" title="Vote Up">▲</button>
+                            <span>${score}</span>
+                            <button type="button" class="${myVote === -1 ? "down-active" : ""}" data-down="${esc(d.id)}" title="Vote Down">▼</button>
+                        </div>
+
+                        <button type="button" class="btn ${isCommentsOpen ? "btn-primary" : ""}" data-togglecomment="${esc(d.id)}">
+                            Comments (${d.comments.length})
+                        </button>
+                    </div>
+
+                    ${commentsHtml}
+                </article>`;
+            }).join("");
+        };
+
+        $("#devoirsList").addEventListener("click", async (e) => {
+            if (e.target.closest("[data-open-premium]")) {
+                $("#premiumCard").style.display = "flex";
+                updateSelectedPlanUI();
+                $("#premiumCard").scrollIntoView({ behavior: "smooth" });
+                return;
+            }
+
+            const card = e.target.closest("[data-id]");
+            if (!card) return;
+            const post = devoirs.find((x) => x.id === card.dataset.id);
+            if (!post) return;
+            post.votes = post.votes && typeof post.votes === "object" ? post.votes : {};
+            post.comments = Array.isArray(post.comments) ? post.comments : [];
+            const voterKey = getVoterKey();
+
+            if (e.target.closest("[data-readmore]")) {
+                if (expandedPostIds.has(post.id)) {
+                    expandedPostIds.delete(post.id);
+                } else {
+                    expandedPostIds.add(post.id);
+                }
+                renderDevoirs();
+            } else if (e.target.closest("[data-toggleallcomments]")) {
+                if (showAllCommentsPostIds.has(post.id)) {
+                    showAllCommentsPostIds.delete(post.id);
+                } else {
+                    showAllCommentsPostIds.add(post.id);
+                }
+                renderDevoirs();
+            } else if (e.target.closest("[data-up]")) {
+                const nextVal = Number(post.votes[voterKey] || 0) === 1 ? 0 : 1;
+                post.votes[voterKey] = nextVal;
+                setDB("devoirs", devoirs);
+                renderDevoirs();
+                if (db) {
+                    updateDoc(doc(db, "devoirs", post.id), { [`votes.${voterKey}`]: nextVal }).catch(() => {});
+                }
+            } else if (e.target.closest("[data-down]")) {
+                const nextVal = Number(post.votes[voterKey] || 0) === -1 ? 0 : -1;
+                post.votes[voterKey] = nextVal;
+                setDB("devoirs", devoirs);
+                renderDevoirs();
+                if (db) {
+                    updateDoc(doc(db, "devoirs", post.id), { [`votes.${voterKey}`]: nextVal }).catch(() => {});
+                }
+            } else if (e.target.closest("[data-togglecomment]")) {
+                openCommentId = openCommentId === post.id ? null : post.id;
+                renderDevoirs();
+            } else if (e.target.closest("[data-del]")) {
+                devoirs = devoirs.filter((x) => x.id !== post.id);
+                expandedPostIds.delete(post.id);
+                showAllCommentsPostIds.delete(post.id);
+                if (openCommentId === post.id) openCommentId = null;
+                setDB("devoirs", devoirs);
+                renderDevoirs();
+                if (db) {
+                    deleteDoc(doc(db, "devoirs", post.id)).catch(() => {});
+                }
+            } else if (e.target.closest("[data-cdel]")) {
+                const cid = e.target.closest("[data-cdel]").dataset.cdel;
+                post.comments = post.comments.filter((c) => c.id !== cid);
+                if (post.comments.length <= PREVIEW_COMMENTS_LIMIT) {
+                    showAllCommentsPostIds.delete(post.id);
+                }
+                setDB("devoirs", devoirs);
+                renderDevoirs();
+                if (db) {
+                    updateDoc(doc(db, "devoirs", post.id), { comments: post.comments }).catch(() => {});
+                }
+            }
+        });
+
+        $("#devoirsList").addEventListener("submit", async (e) => {
+            const form = e.target.closest("[data-cform]");
+            if (!form) return;
+            e.preventDefault();
+            if (!account || !account.name) return;
+
+            const post = devoirs.find((x) => x.id === form.dataset.cform);
+            if (!post) return;
+            const input = form.querySelector("input");
+            const text = (input ? input.value : "").trim();
+            if (!text) return;
+
+            post.comments = Array.isArray(post.comments) ? post.comments : [];
+            post.comments.push({
+                id: Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 5),
+                authorName: account.name,
+                authorPic: account.pic || DEFAULT_AVATAR,
+                text,
+                time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+            });
+            setDB("devoirs", devoirs);
+            openCommentId = post.id;
+            renderDevoirs();
+
+            if (db) {
+                updateDoc(doc(db, "devoirs", post.id), { comments: post.comments }).catch(() => {});
+            }
+        });
+
+        $("#searchInput").addEventListener("input", renderDevoirs);
+
+        const renderStudyChat = () => {
+            if (!studyMessages.length) {
+                $("#studyChatBox").innerHTML = `<div class="muted">No messages yet.</div>`;
+                return;
+            }
+            $("#studyChatBox").innerHTML = studyMessages.map((m) => {
+                const isMine = account && m.authorName === account.name;
+                return `
+                <div class="study-msg ${isMine ? "mine" : ""}">
+                    <div class="study-msg-head">
+                        <div class="row" style="gap: 6px;">
+                            <img src="${esc(m.authorPic || DEFAULT_AVATAR)}" class="avatar" style="width: 24px; height: 24px;" alt="">
+                            <strong>${esc(m.authorName)}</strong>
+                        </div>
+                        <span>${esc(m.time || "")}</span>
+                    </div>
+                    <div>${esc(m.text)}</div>
+                </div>`;
+            }).join("");
+            $("#studyChatBox").scrollTop = $("#studyChatBox").scrollHeight;
+        };
+
+        $("#studyChatForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!account || !account.name) return;
+            const text = ($("#studyChatInput").value || "").trim();
+            if (!text) return;
+
+            const msgId = Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 6);
+            const msgObj = {
+                id: msgId,
+                authorName: account.name,
+                authorPic: account.pic || DEFAULT_AVATAR,
+                text,
+                time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                createdMs: Date.now()
+            };
+
+            studyMessages.push(msgObj);
+            setDB("study_chat", studyMessages);
+            $("#studyChatInput").value = "";
+            renderStudyChat();
+
+            if (db) {
+                try {
+                    await setDoc(doc(db, "study_chat", msgId), {
+                        ...msgObj,
+                        serverTime: serverTimestamp()
+                    });
+                } catch {}
+            }
+        });
+
+        if (db) {
+            onSnapshot(query(collection(db, "devoirs"), orderBy("createdMs", "desc")), (snap) => {
+                devoirs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+                setDB("devoirs", devoirs);
+                if (activeTab === "devoirs" && account?.name) renderDevoirs();
+            }, () => {});
+
+            onSnapshot(query(collection(db, "study_chat"), orderBy("createdMs", "asc")), (snap) => {
+                studyMessages = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+                setDB("study_chat", studyMessages);
+                if (activeTab === "chat" && account?.name) renderStudyChat();
+            }, () => {});
+
+            if (account?.name) {
+                const userDocId = encodeURIComponent(account.name.toLowerCase());
+                onSnapshot(doc(db, "users", userDocId), (snap) => {
+                    if (snap.exists()) {
+                        const remote = snap.data();
+                        account = {
+                            ...account,
+                            premiumUntil: remote.premiumUntil || null,
+                            premiumPlan: remote.premiumPlan || null
+                        };
+                        setDB("account", account);
+                        syncUI();
+                    }
+                }, () => {});
+            }
+        }
+
+        if (account && account.name) {
+            $("#accountCard").style.display = "none";
+        }
+        updateSelectedPlanUI();
+        syncUI();
+    });
+    </script>
+</body>
+</html>
